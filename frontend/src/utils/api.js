@@ -4,14 +4,19 @@
 
 import axios from 'axios';
 
+// Get the API URL from environment variables
+const baseURL = process.env.REACT_APP_API_URL 
+  ? `${process.env.REACT_APP_API_URL}/api` 
+  : '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor: attach JWT token from localStorage
+[cite_start]// Request interceptor: attach JWT token from localStorage [cite: 31, 32]
 api.interceptors.request.use(
   (config) => {
     const userInfo = localStorage.getItem('userInfo');
@@ -26,7 +31,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: handle 401 globally
+[cite_start]// Response interceptor: handle 401 globally [cite: 33, 34]
 api.interceptors.response.use(
   (response) => response,
   (error) => {
