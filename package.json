@@ -1,0 +1,16 @@
+{
+  "name": "nexusshop-mern",
+  "version": "1.0.0",
+  "description": "Full-stack MERN e-commerce application",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm start",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "seed": "cd backend && node seeder.js",
+    "seed:destroy": "cd backend && node seeder.js -d"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
