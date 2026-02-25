@@ -32,10 +32,14 @@ const __dirname = path.dirname(__filename);
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
-  
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  // UPDATED: Allow both local testing and your live Vercel frontend
+  origin: [
+    'http://localhost:3000',
+    'https://ecommerce-nextus-shop.vercel.app'
+  ],
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
