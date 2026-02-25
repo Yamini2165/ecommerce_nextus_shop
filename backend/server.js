@@ -1,10 +1,7 @@
 /**
- * server.js - Main Entry Point
- * MERN E-Commerce Application
- */
-
-/*import dns from 'node:dns/promises';
-dns.setServers(['1.1.1.1', '8.8.8.8']);*/
+ * server.js - Main Entry Point
+ * MERN E-Commerce Application
+ */
 
 import express from 'express';
 import dotenv from 'dotenv';
@@ -34,14 +31,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-// Change your current CORS block to this:
+// Updated CORS to include both Vercel domains from your logs
 app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://ecommerce-nextus-shop.vercel.app',
+    'https://ecommerce-nextus-shop-qx9nulxbj-yamini2165-6892s-projects.vercel.app'
   ],
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -56,7 +55,7 @@ app.use('/api/upload', uploadRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
+  res.json({ status: 'OK', message: 'Server is running' });
 });
 
 // ── Error Handling Middleware ─────────────────────────────────────────────────
@@ -66,10 +65,9 @@ app.use(errorHandler);
 // ── Start Server ──────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  );
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  );
 });
 
 export default app;
-
