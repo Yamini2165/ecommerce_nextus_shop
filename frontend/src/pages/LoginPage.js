@@ -107,13 +107,15 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Demo credentials */}
+          {/* Demo credentials 
           <div className="mt-4 p-3 bg-purple-500/5 border border-purple-500/15 rounded-xl">
             <p className="text-slate-500 text-xs text-center font-mono">
               Demo: admin@shop.com / admin123
             </p>
           </div>
-
+          */}
+          
+          
           <p className="text-center text-slate-500 text-sm mt-6">
             Don't have an account?{' '}
             <Link to="/register" className="text-purple-400 hover:text-purple-300 font-medium">
