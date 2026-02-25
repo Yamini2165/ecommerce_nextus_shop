@@ -1,5 +1,6 @@
 /**
  * redux/slices/authSlice.js - User Authentication State
+ * Modified to ensure cart data is cleared upon logout.
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
@@ -78,11 +79,20 @@ const authSlice = createSlice({
     success: false,
   },
   reducers: {
+    /**
+     * Modified Logout: Clears user info AND cart persistence
+     */
     logout: (state) => {
       state.userInfo = null;
       state.error = null;
       state.success = false;
+      
+      // ── Clean Up LocalStorage ──
       localStorage.removeItem('userInfo');
+      localStorage.removeItem('cart'); // Added to fix the cart count issue
+      
+      // Optional: Force a page reload to reset all Redux states
+      window.location.href = '/login'; 
     },
     clearError: (state) => {
       state.error = null;

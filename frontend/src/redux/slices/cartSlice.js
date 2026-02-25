@@ -1,13 +1,12 @@
 /**
  * redux/slices/cartSlice.js - Shopping Cart State
- * Cart items are persisted to localStorage for session continuity
+ * Fixed: Prevents duplicate items and ensures persistence.
  */
-
 import { createSlice } from '@reduxjs/toolkit';
 
-// Helpers
 const roundPrice = (num) => Math.round(num * 100) / 100;
 
+// Helper to calculate total summary
 const calcPrices = (items) => {
   const itemsPrice = roundPrice(items.reduce((sum, i) => sum + i.price * i.qty, 0));
   const shippingPrice = itemsPrice > 100 ? 0 : 9.99; // Free shipping over $100
@@ -16,11 +15,12 @@ const calcPrices = (items) => {
   return { itemsPrice, shippingPrice, taxPrice, totalPrice };
 };
 
-// Load persisted cart from localStorage
+// Initialize state from LocalStorage
 const cartFromStorage = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
   : { cartItems: [], shippingAddress: {}, paymentMethod: 'PayPal' };
 
+// Persistence helper
 const persistCart = (state) => {
   localStorage.setItem('cart', JSON.stringify({
     cartItems: state.cartItems,
@@ -28,8 +28,6 @@ const persistCart = (state) => {
     paymentMethod: state.paymentMethod,
   }));
 };
-
-// ── Slice ──────────────────────────────────────────────────────────────────────
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -39,17 +37,16 @@ const cartSlice = createSlice({
   },
   reducers: {
     /**
-     * Add item to cart or update quantity if already exists
+     * Add to cart: Updates quantity if item exists, else adds new
      */
     addToCart: (state, action) => {
       const item = action.payload;
       const existingItem = state.cartItems.find((x) => x._id === item._id);
 
       if (existingItem) {
-        // Update quantity (cap at available stock)
         state.cartItems = state.cartItems.map((x) =>
           x._id === item._id
-            ? { ...x, qty: Math.min(x.qty + item.qty, x.countInStock) }
+            ? { ...x, qty: Math.min(item.qty, x.countInStock) } 
             : x
         );
       } else {
@@ -61,9 +58,6 @@ const cartSlice = createSlice({
       persistCart(state);
     },
 
-    /**
-     * Remove item from cart by product ID
-     */
     removeFromCart: (state, action) => {
       state.cartItems = state.cartItems.filter((x) => x._id !== action.payload);
       const prices = calcPrices(state.cartItems);
@@ -71,9 +65,6 @@ const cartSlice = createSlice({
       persistCart(state);
     },
 
-    /**
-     * Update quantity of an item in cart
-     */
     updateCartQty: (state, action) => {
       const { id, qty } = action.payload;
       state.cartItems = state.cartItems.map((x) =>
@@ -84,24 +75,18 @@ const cartSlice = createSlice({
       persistCart(state);
     },
 
-    /**
-     * Save shipping address to state and localStorage
-     */
     saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
       persistCart(state);
     },
 
-    /**
-     * Save payment method selection
-     */
     savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
       persistCart(state);
     },
 
     /**
-     * Clear cart after successful order
+     * Clear cart: Resets all prices and removes LocalStorage data
      */
     clearCart: (state) => {
       state.cartItems = [];
@@ -111,18 +96,18 @@ const cartSlice = createSlice({
       state.shippingPrice = 0;
       state.taxPrice = 0;
       state.totalPrice = 0;
-      localStorage.removeItem('cart');
+      localStorage.removeItem('cart'); 
     },
   },
 });
 
-export const {
-  addToCart,
-  removeFromCart,
-  updateCartQty,
-  saveShippingAddress,
-  savePaymentMethod,
-  clearCart,
+export const { 
+  addToCart, 
+  removeFromCart, 
+  updateCartQty, 
+  saveShippingAddress, 
+  savePaymentMethod, 
+  clearCart 
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
