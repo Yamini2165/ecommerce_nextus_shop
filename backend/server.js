@@ -36,7 +36,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://ecommerce-nextus-shop.vercel.app',
-    'https://ecommerce-nextus-shop-qx9nulxbj-yamini2165-6892s-projects.vercel.app'
+    
   ],
   credentials: true,
 }));
