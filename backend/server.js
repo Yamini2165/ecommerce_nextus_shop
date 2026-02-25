@@ -1,7 +1,7 @@
 /**
- * server.js - Main Entry Point
- * MERN E-Commerce Application
- */
+ * server.js - Main Entry Point
+ * MERN E-Commerce Application
+ */
 
 import express from 'express';
 import dotenv from 'dotenv';
@@ -32,14 +32,11 @@ const __dirname = path.dirname(__filename);
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
-  // UPDATED: Allow both local testing and your live Vercel frontend
-  origin: [
-    'http://localhost:3000',
-    'https://ecommerce-nextus-shop.vercel.app'
-  ],
-  credentials: true,
+  
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  
+  credentials: true,
 }));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -54,7 +51,7 @@ app.use('/api/upload', uploadRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
+  res.json({ status: 'OK', message: 'Server is running' });
 });
 
 // ── Error Handling Middleware ─────────────────────────────────────────────────
@@ -64,9 +61,10 @@ app.use(errorHandler);
 // ── Start Server ──────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  );
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  );
 });
 
 export default app;
+
