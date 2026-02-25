@@ -51,9 +51,11 @@ const HomePage = () => {
         ...(category && { category }),
       });
       const { data } = await api.get(`/products?${params}`);
-      setProducts(data.data);
-      setTotalPages(data.pages);
-      setTotalProducts(data.total);
+      
+      // Safety check for data structure
+      setProducts(data?.data || []); 
+      setTotalPages(data?.pages || 1);
+      setTotalProducts(data?.total || 0);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load products');
     } finally {
@@ -82,7 +84,6 @@ const HomePage = () => {
       {/* ── Hero Banner ── */}
       {!keyword && !category && page === 1 && (
         <div className="relative overflow-hidden bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 border-b border-purple-500/10">
-          {/* Background decorations */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl" />
@@ -122,8 +123,6 @@ const HomePage = () => {
 
       {/* ── Main Content ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="products">
-
-        {/* Page header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             {keyword ? (
@@ -141,7 +140,6 @@ const HomePage = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Sort */}
             <div className="relative">
               <select
                 value={sort}
@@ -155,7 +153,6 @@ const HomePage = () => {
               <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
             </div>
 
-            {/* Mobile filter toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="sm:hidden btn-secondary !py-2 !px-3 flex items-center gap-1"
@@ -166,7 +163,6 @@ const HomePage = () => {
         </div>
 
         <div className="flex gap-6">
-          {/* ── Sidebar Filters (Desktop) ── */}
           <aside className={`hidden sm:block w-56 flex-shrink-0`}>
             <div className="sticky top-20 space-y-6">
               <div>
@@ -206,7 +202,6 @@ const HomePage = () => {
             </div>
           </aside>
 
-          {/* ── Mobile Filters ── */}
           {showFilters && (
             <div className="sm:hidden fixed inset-0 z-50 bg-dark-900/95 p-6 overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
@@ -229,13 +224,13 @@ const HomePage = () => {
             </div>
           )}
 
-          {/* ── Products Grid ── */}
           <div className="flex-1 min-w-0">
             {loading ? (
               <Loader text="Loading products..." />
             ) : error ? (
               <Message type="error">{error}</Message>
-            ) : products.length === 0 ? (
+            // Safety Check: Added "products?.length" and "!products" check
+            ) : !products || products?.length === 0 ? (
               <div className="text-center py-16">
                 <p className="text-6xl mb-4">🔍</p>
                 <h3 className="font-display text-xl font-semibold text-white mb-2">No products found</h3>
@@ -245,14 +240,14 @@ const HomePage = () => {
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-                  {products.map((product, i) => (
+                  {/* Safety Check: Optional Chaining on map */}
+                  {products?.map((product, i) => (
                     <div key={product._id} className="animate-in" style={{ animationDelay: `${i * 50}ms` }}>
                       <ProductCard product={product} />
                     </div>
                   ))}
                 </div>
 
-                {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex justify-center gap-2 mt-10">
                     <button

@@ -10,17 +10,17 @@ import colors from 'colors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Route imports [cite: 41, 43, 45, 47]
+// Route imports 
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 
-// Middleware and DB imports [cite: 24, 34]
+// Middleware and DB imports 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import connectDB from './config/db.js';
 
-// Load environment variables [cite: 22, 185]
+// Load environment variables 
 dotenv.config();
 
 // Connect to MongoDB (Auto-seeding now happens inside this function) 
@@ -32,14 +32,14 @@ const __dirname = path.dirname(__filename);
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
-  // In production, Render will use the actual frontend URL [cite: 192]
+  
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static folder for uploads [cite: 47, 48]
+// Static folder for uploads 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // ── API Routes ────────────────────────────────────────────────────────────────
