@@ -3,8 +3,9 @@
  * MERN E-Commerce Application
  */
 
-import dns from 'node:dns/promises';
-dns.setServers(['1.1.1.1', '8.8.8.8']);
+/*import dns from 'node:dns/promises';
+dns.setServers(['1.1.1.1', '8.8.8.8']);*/
+
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -35,9 +36,12 @@ const __dirname = path.dirname(__filename);
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
   
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  
-  credentials: true,
+    origin: [
+        'http://localhost:3000',
+        'https://ecommerce-nextus-shop.vercel.app',
+        // This regex allows all Vercel preview deployments
+    ],
+    credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

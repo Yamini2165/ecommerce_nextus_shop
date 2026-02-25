@@ -3,6 +3,7 @@ import axios from 'axios';
 // Hardcoding the URL for stability to bypass the 'Initialization' error
 const api = axios.create({
   baseURL: 'https://ecommerce-backend-api-nb58.onrender.com/api',
+  
   //baseURL: 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
