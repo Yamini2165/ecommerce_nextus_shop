@@ -34,14 +34,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ── Middleware ────────────────────────────────────────────────────────────────
+// Change your current CORS block to this:
 app.use(cors({
-  
-    origin: [
-        'http://localhost:3000',
-        'https://ecommerce-nextus-shop.vercel.app',
-        // This regex allows all Vercel preview deployments
-    ],
-    credentials: true,
+  origin: [
+    'http://localhost:3000',
+    'https://ecommerce-nextus-shop.vercel.app',
+  ],
+  credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
